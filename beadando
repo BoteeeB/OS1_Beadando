@@ -1,7 +1,8 @@
 #!/bin/bash
 
 PS3='Kérlek add meg a választásod:'
-options=("Négyzetgyök kiszámoló" "Random jelszó generáló" "Kiírja a mai dátumot" "Fibonacci számsorozat" "Kilépés")
+options=("Négyzetgyök kiszámoló" "Random jelszó generáló" "Kiírja a mai dátumot" "Fibonacci számsorozat" 
+"Négyszög rajzoló" "Kilépés")
 select opt in "${options[@]}"
 do
 	case $opt in
@@ -49,6 +50,21 @@ do
 		    }
 		    r=`fib $n`
 		    echo "$r"
+		     ;;
+
+		"Négyszög rajzoló")
+		  read -p "Add meg a négyszög nagyságát(minimum 4): " size
+		  clear
+		  for (( i = 1; i <= size; i++ )); do
+		    for (( j = 1; j <= size; j++ )); do
+		      if (( 1 == i || size == 1 || 1 == j || size == j )); then
+			  echo -n "*"
+			else
+			  echo -n " "
+		      fi
+		      done
+		      echo
+		     done
 		     ;;
 
 		"Kilépés")
