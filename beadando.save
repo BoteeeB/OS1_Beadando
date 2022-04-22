@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PS3='Kérlek add meg a választásod:'
+options=("Opció 1" "Opció 2" "Kiírja a mai dátumot" "Kilépés")
+select opt in "${options[@]}"
+do
+	case $opt in
+		"Opció 1")
+		     ;;
+		"Opció 2")
+		   echo "you chose choice 2"
+		     ;;
+		"Kiírja a mai dátumot")
+		   now=$
+		   echo "Current date: $now"
+		   ;;
+		"Quit")
+		   break
+		     ;;
+		*) echo "invalid option $REPLY";;
+	      esac
+	     done
+

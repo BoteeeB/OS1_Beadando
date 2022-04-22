@@ -2,7 +2,7 @@
 
 PS3='Kérlek add meg a választásod:'
 options=("Négyzetgyök kiszámoló" "Random jelszó generáló" "Kiírja a mai dátumot" "Fibonacci számsorozat" 
-"Négyszög rajzoló" "Mappa készítő" "Hatványozás" "Kilépés")
+"Négyszög rajzoló" "" "Kilépés")
 select opt in "${options[@]}"
 do
 	case $opt in
@@ -54,6 +54,7 @@ do
 
 		"Négyszög rajzoló")
 		  read -p "Add meg a négyszög nagyságát(minimum 4): " size
+		  clear
 		  for (( i = 1; i <= size; i++ )); do
 		    for (( j = 1; j <= size; j++ )); do
 		      if (( 1 == i || size == 1 || 1 == j || size == j )); then
@@ -64,27 +65,6 @@ do
 		      done
 		      echo
 		     done
-		     ;;
-
-		"Mappa készítő")
-		   echo -n "Add meg a mappa nevét ->"
-		   read dir
-		   if [ -d "$dir" ]
-		   	then
-		   	echo "A mappa létezik"
-		   	else
-		   	`mkdir $dir`
-		   	echo "A mappa elkészült"
-		   fi
-		     ;;
-
-		"Hatványozás")
-	  	   echo "Adj meg egy számot: "
-		   read n
-		   echo "Add meg a hatványt: "
-		   read m
-		   let p=($n**$m)
-		   echo "Az eredmény: $p"
 		     ;;
 
 		"Kilépés")
