@@ -2,20 +2,18 @@
 
 PS3='Kérlek add meg a választásod:'
 options=("Négyzetgyök kiszámoló" "Random jelszó generáló" "Kiírja a mai dátumot" "Fibonacci számsorozat" 
-"Négyszög rajzoló" "Mappa készítő" "Hatványozás" "Kilépés")
-select opt in "${options[@]}"
+"Létezik-e?" "Mappa készítő" "Hatványozás" "Kilépés")
+while getopts :r:n:df:e:k opt
 do
 	case $opt in
-		"Négyzetgyök kiszámoló")
-		   read -p "Adj meg egy számot: " number
+		n)
+		   number=$OPTARG
 		   square_root=`echo "scale=4; sqrt($number)" | bc`
 		   echo "Az általad megadott számnak a négyzetgyöke $square_root"
 		     ;;
 
-		"Random jelszó generáló")
-		   printf "\n"
-		   read -p "Hány karakteres jelszót szeretnél?" pass_length
-		   printf "\n"
+		r)
+		   pass_length=$OPTARG
 
 		   for i in {1..5}; do (tr -cd '[:alnum:]' < /dev/urandom | fold -w${pass_length} | head -n 1); 
 		   done
@@ -28,9 +26,8 @@ do
 		   echo "Mai dátum: $now"
 		   ;;
 
-		"Fibonacci számsorozat")
-		   echo "Hány számot szeretnél legenerálni a sorozatból?"
-		    read n
+		f)
+		   n=$OPTARG
 		   function fib
 		   {
     		     x=0
@@ -52,45 +49,34 @@ do
 		    echo "$r"
 		     ;;
 
-		"Négyszög rajzoló")
-		  read -p "Add meg a négyszög nagyságát(minimum 4): " size
-		  for (( i = 1; i <= size; i++ )); do
-		    for (( j = 1; j <= size; j++ )); do
-		      if (( 1 == i || size == 1 || 1 == j || size == j )); then
-			  echo -n "*"
-			else
-			  echo -n " "
-		      fi
-		      done
-		      echo
-		     done
-		     ;;
-
-		"Mappa készítő")
-		   echo -n "Add meg a mappa nevét ->"
-		   read dir
-		   if [ -d "$dir" ]
-		   	then
-		   	echo "A mappa létezik"
-		   	else
-		   	`mkdir $dir`
-		   	echo "A mappa elkészült"
-		   fi
-		     ;;
-
-		"Hatványozás")
-	  	   echo "Adj meg egy számot: "
-		   read n
-		   echo "Add meg a hatványt: "
-		   read m
-		   let p=($n**$m)
-		   echo "Az eredmény: $p"
-		     ;;
-
-		"Kilépés")
-		   break
-		     ;;
-		*) echo "invalid option $REPLY";;
-	      esac
-	     done
-
+		"Létezik-e?")
+		  echo "Add meg a fájl nevét"
+		  read newfile1
+	   	  if [ -f "$newfile1" ]
+	  	  then
+		  echo "Ilyen fájl létezik!"
+		  else
+		    echo "Ilyen fájl nem létezik!"
+	          fi
+		  ;;
+		k)
+		curl https://kontests.net/api/v1/all -o response.json
+		n=$(cat response.json | jq ". | length")
+		i=0
+		while [ $i -lt $n ]
+		do 
+		cat response.json | jq .[$i].name | tr -d "\""
+		cat response.json | jq .[$i].start_time | tr -d "\""
+		echo
+ 		i=$(($i+1))
+		done
+		 ;;
+		:)
+		echo "$OPTARG vár értéket"
+		exit
+		;;
+		*)
+		echo "Érvénytelen paraméter!"
+		exit
+		esac
+		done
